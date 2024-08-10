@@ -94,7 +94,7 @@ To launch the high-rate CPS:
 
     sudo python3 CPS-highrate.py
 
-During attacks, to simulate the CPU consumption of the controller:
+During attacks, to simulate the CPU consumption of the controller, open a new terminal and run:
 
     sudo python3 top_cpu_uti.py
 
