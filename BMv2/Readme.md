@@ -75,20 +75,33 @@ Disable Even-Mansour and SipHash in p4src/int_md.p4
     // process_SipHash_1_3.apply(hdr, local_metadata, standard_metadata);
 
 Open a terminal, compile and run INT:
+
     make
 
 Open another terminal, run the controller:
 
     sudo python3 mycontroller.py
     
-In the first terminal, run the low rate CPS:
+In the first terminal, open h1:
+
     xterm h1
 
+## CPS
+
 To launch the low-rate CPS:
+
     sudo python3 CPS-lowrate.py
 
 To launch the high-rate CPS:
+
     sudo python3 CPS-highrate.py
 
+During attacks, to simulate the CPU consumption of the controller:
+
+    sudo python3 top_cpu_uti.py
+
+To simulate the memeory consumption of the controller:
+
+    sudo python3 top_mem_uti.py
 
     
