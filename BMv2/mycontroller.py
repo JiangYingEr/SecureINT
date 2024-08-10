@@ -275,6 +275,12 @@ def issue_keys(num):
         encrypted_id = t ^ (i+1)
         enid_2_real_id[encrypted_id] = i+1
 
+
+def mysniff(iface):
+    sniff(iface = iface,filter='inbound and tcp or udp',
+        prn = lambda x: handle_pkt(x))
+
+
 def main():
 
 
@@ -312,11 +318,21 @@ def main():
         s.table_add("process_SipHash_1_3.tb_read_SipRound_keys", "read_SipRound_keys", str(i+1), [spkey1, spkey2, i0, i1, i2, i3])
 
 
-    iface = 's' + str(switch_num) + '-cpu-eth1'
-    print("sniffing on %s" % iface)
-    sys.stdout.flush()
-    sniff(iface = iface,filter='inbound and tcp or udp',
-        prn = lambda x: handle_pkt(x))
+    t1 = threading.Thread(target = mysniff, args = ("s1-cpu-eth1",))
+    t2 = threading.Thread(target = mysniff, args = ("s2-cpu-eth1",))
+    t3 = threading.Thread(target = mysniff, args = ("s3-cpu-eth1",))
+    t4 = threading.Thread(target = mysniff, args = ("s4-cpu-eth1",))
+    t5 = threading.Thread(target = mysniff, args = ("s5-cpu-eth1",))
+    #t6 = threading.Thread(target = mysniff, args = ("s6-cpu-eth1",))
+    #t7 = threading.Thread(target = mysniff, args = ("s7-cpu-eth1",))
+    #t8 = threading.Thread(target = mysniff, args = ("s8-cpu-eth1",))
+    #t9 = threading.Thread(target = mysniff, args = ("s9-cpu-eth1",))
+    #t10 = threading.Thread(target = mysniff, args = ("s10-cpu-eth1",))
+    t1.start()
+    t2.start()
+    t3.start()
+    t4.start()
+    t5.start()
 
 
 
