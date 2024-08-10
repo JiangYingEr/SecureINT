@@ -5,7 +5,7 @@ The P4 VM Ubuntu20.04. [Download](https://github.com/p4lang/tutorials?tab=readme
 
 ## Run SecureINT
 
-Download this repo (SecureINT/BMv2).
+Download this repo (SecureINT/BMv2) in the P4-VM.
 
 Compile and run SecureINT:
 
