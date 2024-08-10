@@ -86,8 +86,6 @@ In the first terminal, open h1:
 
     xterm h1
 
-## CPS
-
 To launch the low-rate CPS:
 
     sudo python3 CPS-lowrate.py
@@ -104,4 +102,6 @@ To simulate the memeory consumption of the controller:
 
     sudo python3 top_mem_uti.py
 
-    
+To launch TEA:
+
+    sudo python3 TEA.py
