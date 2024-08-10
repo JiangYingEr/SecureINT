@@ -43,7 +43,7 @@ If disable SipHash, comment out the following line in p4src/int_md.p4
 
 If these two lines are both commented out, SecureINT becomes the ordinary INT, whose INT metadata is plaintext.
 
-The P4 codes of SecureINT contain the decryption function, which is in p4src/include/encrypt.p4
+The P4 codes of SecureINT contain the decryption function (disabled by default), which is in p4src/include/encrypt.p4
 
 If want to decrypt, uncomment the lines below:
 
@@ -66,3 +66,29 @@ If want to decrypt, uncomment the lines below:
         hdr.plaintext_3.value = hdr.ciphertext_3.value;
 
         */
+
+# Attacks examples
+
+Disable Even-Mansour and SipHash in p4src/int_md.p4
+
+    // process_encrypt.apply(hdr, local_metadata, standard_metadata);
+    // process_SipHash_1_3.apply(hdr, local_metadata, standard_metadata);
+
+Open a terminal, compile and run INT:
+    make
+
+Open another terminal, run the controller:
+
+    sudo python3 mycontroller.py
+    
+In the first terminal, run the low rate CPS:
+    xterm h1
+
+To launch the low-rate CPS:
+    sudo python3 CPS-lowrate.py
+
+To launch the high-rate CPS:
+    sudo python3 CPS-highrate.py
+
+
+    
