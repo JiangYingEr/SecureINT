@@ -17,10 +17,14 @@ from scapy.all import *
 from datetime import datetime
 
 
-
-switches = []
-keys = []
-enid_2_real_id = {}
+key_length =            128
+switches =              []
+keys =                  []
+permutations =          []
+inverse_permutations =  []
+enid_2_real_id =        {}
+Siphash_keys =          []
+SipHash_inits =         []
 
 class INTREP(Packet):
     name = "INT Report Header v2.0"
@@ -52,7 +56,7 @@ class INTShim(Packet):
         BitField("next_protocol", 0, 2),
         BitField("rsvd", 0, 2),
         BitField("int_length", 0, 8),
-        ShortField("NPT Dependent Field", 0)]
+        ShortField("NPTDependentField", 0)]
 
 class INTMD(Packet):
     name = "INT-MD Header v2.1"
@@ -110,6 +114,8 @@ class HopMetadata():
         self.l2_ingress_port_id = None
         self.l2_egress_port_id = None
         self.egress_port_tx_util = None
+        self.padding = None
+        self.verification_checksum = None
 
     @staticmethod
     def from_bytes(data, ins_map):
@@ -134,6 +140,10 @@ class HopMetadata():
             hop.l2_egress_port_id = int.from_bytes(d.read(4), byteorder='big')
         if ins_map & EGRESS_PORT_TX_UTIL_BIT:
             hop.egress_port_tx_util = int.from_bytes(d.read(4), byteorder='big')
+
+        #padding
+        hop.padding = int.from_bytes(d.read(4), byteorder='big')
+        hop.verification_checksum = int.from_bytes(d.read(8), byteorder='big')
         return hop
 
     def __str__(self):
@@ -180,6 +190,8 @@ def parse_metadata(int_pkt):
 
     instructions = (int_pkt[INTMD].instruction_mask_0003 << 4) + int_pkt[INTMD].instruction_mask_0407
     int_len = int_pkt.int_length-3
+
+    #+3 including padding and siphash value
     hop_meta_len = int_pkt[INTMD].HopMetaLength
     int_metadata = int_pkt.load[:int_len<<2]
 
@@ -190,13 +202,13 @@ def parse_metadata(int_pkt):
         metadata_source = int_metadata[i*hop_meta_len<<2:(i+1)*hop_meta_len<<2]
         meta = HopMetadata.from_bytes(metadata_source, instructions)
         #meta.switch_id = enid_2_real_id[meta.switch_id]
-        #print(meta)
+        print(meta)
         t1 = datetime.now()
-        meta = parse_encrypted_metadata(meta)
+        #meta = parse_encrypted_metadata(meta)
         t2 = datetime.now()
         t = t2-t1
-        print(t)
-        #timeconsumption += meta.hop_latency
+        #print(t)
+        timeconsumption += meta.hop_latency
         #print(meta.hop_latency)
         hop_metadata.append(meta)
     #print(timeconsumption)
@@ -213,39 +225,30 @@ def handle_pkt(pkt):
 # Import P4Runtime lib from parent utils dir
 # Probably there's a better way of doing this.
 
+def generate_key(length):
+    k1 = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(length)])
+
+    return k1
+
+def generate_permutation(length):
+    p = [i for i in range(length)]
+    shuffle(p)
+    inv_p = [0 for i in range(length)]
+    for i in range(length):
+        inv_p[p[i]] = i
+
+    for i in range(length):
+        p[i] = str(p[i])
+        inv_p[i] = str(inv_p[i])
+
+    return p, inv_p
 
 
-def issue_keys():
-    switch_num = 5
+def issue_keys(num):
+    switch_num = num
     for i in range(switch_num):
         s = SimpleSwitchThriftAPI(9090 + i)
         #print(i)
-
-        tkey = []
-
-        int_switch_id_key = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(8)])
-        tkey.append(int_switch_id_key)
-
-        int_level1_port_ids_key = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(4)])
-        tkey.append(int_level1_port_ids_key)
-
-        int_port_ids_key = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(8)])
-        tkey.append(int_port_ids_key)
-
-        int_hop_latency_key = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(8)])
-        tkey.append(int_hop_latency_key)
-
-        int_q_occupancy_key_1 = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(2)])
-        tkey.append(int_q_occupancy_key_1)
-
-        int_q_occupancy_key_2 = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(6)])
-        tkey.append(int_q_occupancy_key_2)
-
-        int_timestamp_key = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(16)])
-        tkey.append(int_timestamp_key)
-
-        int_egress_tx_util_key = '0x' + ''.join([choice("0123456789ABCDEF") for i in range(8)])
-        tkey.append(int_egress_tx_util_key)
 
 
 
@@ -275,16 +278,46 @@ def issue_keys():
 def main():
 
 
-    issue_keys()
+    switch_num = 5
+    for i in range(switch_num):
+        s = SimpleSwitchThriftAPI(9090 + i)
+        s.set_queue_rate(9000)
+        s.set_queue_depth(9000)
+
+        k1 = generate_key(key_length//4)
+        keys.append(k1)
+
+        p, inv_p = generate_permutation(key_length)
+        permutations.append(p)
+        inverse_permutations.append(inv_p)
+
+
+        s.table_add("process_encrypt.tb_read_encryption_key", "read_encryption_key", str(i+1), [k1])
+        s.table_add("process_encrypt.tb_read_permutation", "read_permutation", str(i+1), p)
+
+        s.table_add("process_encrypt.tb_read_inverse_permutation", "read_inverse_permutation", str(i+1), inv_p)
     #for k in enid_2_real_id.keys():
         #print(k)
         #print(enid_2_real_id[k])
+        spkey1 = generate_key(64//4)
+        spkey2 = generate_key(64//4)
+        Siphash_keys.append([spkey1, spkey2])
 
-    iface = 's5-cpu-eth1'
+        i0 = generate_key(64//4)
+        i1 = generate_key(64//4)
+        i2 = generate_key(64//4)
+        i3 = generate_key(64//4)
+        SipHash_inits.append([i0, i1, i2, i3])
+
+        s.table_add("process_SipHash_1_3.tb_read_SipRound_keys", "read_SipRound_keys", str(i+1), [spkey1, spkey2, i0, i1, i2, i3])
+
+
+    iface = 's' + str(switch_num) + '-cpu-eth1'
     print("sniffing on %s" % iface)
     sys.stdout.flush()
     sniff(iface = iface,filter='inbound and tcp or udp',
         prn = lambda x: handle_pkt(x))
+
 
 
 
