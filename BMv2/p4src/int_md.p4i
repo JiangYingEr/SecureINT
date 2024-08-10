@@ -1,7 +1,7 @@
-# 1 "/home/p4/SecureINT-EM/p4src/int_md.p4"
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4"
 # 1 "<built-in>"
 # 1 "<command-line>"
-# 1 "/home/p4/SecureINT-EM/p4src/int_md.p4"
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4"
 /* -*- P4_16 -*- */
 # 1 "/usr/local/share/p4c/p4include/core.p4" 1
 /*
@@ -86,7 +86,7 @@ match_kind {
     /// Longest-prefix match.
     lpm
 }
-# 3 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
+# 3 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
 # 1 "/usr/local/share/p4c/p4include/v1model.p4" 1
 /*
 Copyright 2013-present Barefoot Networks, Inc.
@@ -872,8 +872,8 @@ package V1Switch<H, M>(Parser<H, M> p,
                        ComputeChecksum<H, M> ck,
                        Deparser<H> dep
                        );
-# 4 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/defines.p4" 1
+# 4 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/defines.p4" 1
 
 
 
@@ -886,7 +886,7 @@ package V1Switch<H, M>(Parser<H, M> p,
 
 
 //packet type
-# 21 "/home/p4/SecureINT-EM/p4src/include/defines.p4"
+# 21 "/home/p4/tutorials/exercises/SecureINT/p4src/include/defines.p4"
 typedef bit<48> mac_t;
 typedef bit<32> ip_address_t;
 typedef bit<16> l4_port_t;
@@ -909,8 +909,8 @@ const bit<8> CPU_MIRROR_SESSION_ID = 250;
 const bit<32> REPORT_MIRROR_SESSION_ID = 500;
 const bit<6> HW_ID = 1;
 const bit<8> REPORT_HDR_TTL = 64;
-# 5 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/headers.p4" 1
+# 5 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/headers.p4" 1
 
 
 
@@ -959,12 +959,12 @@ header udp_t {
     bit<16> checksum;
 }
 const bit<8> UDP_HEADER_LEN = 8;
-# 6 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/int_headers.p4" 1
-# 1 "/home/p4/SecureINT-EM/p4src/include/defines.p4" 1
-# 2 "/home/p4/SecureINT-EM/p4src/include/int_headers.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/headers.p4" 1
-# 3 "/home/p4/SecureINT-EM/p4src/include/int_headers.p4" 2
+# 6 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/int_headers.p4" 1
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/defines.p4" 1
+# 2 "/home/p4/tutorials/exercises/SecureINT/p4src/include/int_headers.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/headers.p4" 1
+# 3 "/home/p4/tutorials/exercises/SecureINT/p4src/include/int_headers.p4" 2
 
 
 
@@ -1373,8 +1373,8 @@ struct local_metadata_t {
     int_metadata_t int_meta;
     preserving_metadata_t perserv_meta;
 }
-# 7 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/parser.p4" 1
+# 7 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/parser.p4" 1
 /*************************************************************************
 *********************** P A R S E R  *******************************
 *************************************************************************/
@@ -1484,11 +1484,11 @@ control MyDeparser(packet_out packet, in headers hdr) {
 
     }
 }
-# 8 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/checksum.p4" 1
+# 8 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/checksum.p4" 1
 
-# 1 "/home/p4/SecureINT-EM/p4src/include/int_headers.p4" 1
-# 3 "/home/p4/SecureINT-EM/p4src/include/checksum.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/int_headers.p4" 1
+# 3 "/home/p4/tutorials/exercises/SecureINT/p4src/include/checksum.p4" 2
 
 control MyVerifyChecksum(inout headers hdr, inout local_metadata_t local_metadata) {
     apply { }
@@ -1537,8 +1537,8 @@ control MyComputeChecksum(inout headers hdr, inout local_metadata_t local_metada
         // #endif // __INT_HEADERS__
     }
 }
-# 9 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/forward.p4" 1
+# 9 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/forward.p4" 1
 
 
 
@@ -1613,8 +1613,8 @@ control port_forward(inout headers hdr,
         tb_port_forward.apply();
      }
 }
-# 10 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/int_source.p4" 1
+# 10 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/int_source.p4" 1
 /* -*- P4_16 -*- */
 
 
@@ -1726,8 +1726,8 @@ control process_int_source (
         tb_int_source.apply();
     }
 }
-# 11 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/int_transit.p4" 1
+# 11 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/int_transit.p4" 1
 control process_int_transit (
     inout headers hdr,
     inout local_metadata_t local_metadata,
@@ -2150,8 +2150,8 @@ control process_int_transit (
         }
     }
 }
-# 12 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/int_sink.p4" 1
+# 12 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/int_sink.p4" 1
 /* -*- P4_16 -*- */
 
 control process_int_sink (
@@ -2305,8 +2305,8 @@ control process_int_report (
         tb_generate_report.apply();
     }
 }
-# 13 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/checkMTU.p4" 1
+# 13 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/checkMTU.p4" 1
 /* -*- P4_16 -*- */
 control process_check_mtu (
     inout headers hdr,
@@ -2406,8 +2406,8 @@ control process_clean_int_metadata (
         tb_clean_int_metadata.apply();
     }
   }
-# 14 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/encrypt.p4" 1
+# 14 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/encrypt.p4" 1
 
 
 
@@ -4441,7 +4441,7 @@ control process_encrypt(
         hdr.ciphertext_3.value = hdr.plaintext_3.value;
 
 
-        //decryption
+        //decryption (if necessary)
         /*
         hdr.ciphertext_1.value = hdr.ciphertext_1.value ^ hdr.encryption_key.k;
         hdr.ciphertext_2.value = hdr.ciphertext_2.value ^ hdr.encryption_key.k;
@@ -4458,8 +4458,8 @@ control process_encrypt(
         hdr.plaintext_1.value = hdr.ciphertext_1.value;
         hdr.plaintext_2.value = hdr.ciphertext_2.value;
         hdr.plaintext_3.value = hdr.ciphertext_3.value;
-        */
 
+        */
 
 
 
@@ -4468,8 +4468,8 @@ control process_encrypt(
     }
 
 }
-# 15 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
-# 1 "/home/p4/SecureINT-EM/p4src/include/SipHash.p4" 1
+# 15 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
+# 1 "/home/p4/tutorials/exercises/SecureINT/p4src/include/SipHash.p4" 1
 
 
 
@@ -4600,7 +4600,7 @@ control process_SipHash_1_3(
 
     }
 }
-# 16 "/home/p4/SecureINT-EM/p4src/int_md.p4" 2
+# 16 "/home/p4/tutorials/exercises/SecureINT/p4src/int_md.p4" 2
 
 /*************************************************************************
 ****************  I N G R E S S   P R O C E S S I N G   ******************
@@ -4617,15 +4617,23 @@ control MyIngress(inout headers hdr,
 
             if(hdr.udp.isValid() || hdr.tcp.isValid()) {
                 process_int_source_sink.apply(hdr, local_metadata, standard_metadata);
-                //process_check_mtu.apply(hdr, local_metadata, standard_metadata);
+                // set INT source and int_sink
+
+                process_check_mtu.apply(hdr, local_metadata, standard_metadata);
+                // check whether the packet length will exceed MTU after inserting INT metadata (and header)
 
             }
 
             if (local_metadata.int_meta.source == true && local_metadata.int_meta.exceed_mtu != true) {
+                // the current switch is INT source and the packet length is not long
+
                 process_int_source.apply(hdr, local_metadata);
+                // initialize INT packet
             }
 
             if ((local_metadata.int_meta.exceed_mtu == true || local_metadata.int_meta.sink == true) && hdr.int_header.isValid()) {
+                // exceed MTU or the current switch is INT sink
+
                 // clone packet for Telemetry Report
                 // clone3(CloneType.I2E, REPORT_MIRROR_SESSION_ID,standard_metadata);
                 // clone(CloneType.I2E, REPORT_MIRROR_SESSION_ID);
@@ -4649,7 +4657,7 @@ control MyEgress(inout headers hdr,
                  inout standard_metadata_t standard_metadata) {
 
     apply {
-        if(hdr.int_header.isValid()) {
+        if (hdr.int_header.isValid()) {
             if(standard_metadata.instance_type == 1) {
                 standard_metadata.ingress_port = local_metadata.perserv_meta.ingress_port;
                 standard_metadata.egress_port = local_metadata.perserv_meta.egress_port;
@@ -4659,20 +4667,30 @@ control MyEgress(inout headers hdr,
                 process_check_mtu_egress.apply(hdr, local_metadata, standard_metadata);
             }
             if (local_metadata.int_meta.exceed_mtu == true && standard_metadata.instance_type != 1) {
+                // the current packet is a normal INT packet whose length is long
+
                 process_clean_int_metadata.apply(hdr, local_metadata, standard_metadata);
+                // clean existing INT metadata
             }
             if (local_metadata.int_meta.exceed_mtu != true || standard_metadata.instance_type != 1) {
+                // the current packet is a normal INT packet whose length is NOT long
+
                 process_int_transit.apply(hdr, local_metadata, standard_metadata);
-                process_encrypt.apply(hdr, local_metadata, standard_metadata);
+                // insert INT metadata
+
+                //process_encrypt.apply(hdr, local_metadata, standard_metadata);
+                // encrypt (or decrypt, which is disabled by default)
+
                 //process_SipHash_1_3.apply(hdr, local_metadata, standard_metadata);
-
-
+                // generate hash
             }
             if (standard_metadata.instance_type == 1) {
                 process_int_report.apply(hdr, local_metadata, standard_metadata);
+                // generate INT report
             }
             if (local_metadata.int_meta.sink == true && standard_metadata.instance_type != 1) {
                 process_int_sink.apply(hdr, local_metadata, standard_metadata);
+                // remove INT header and metadata
             }
         }
     }

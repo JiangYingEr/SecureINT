@@ -2031,7 +2031,7 @@ control process_encrypt(
         hdr.ciphertext_3.value = hdr.plaintext_3.value;
 
 
-        //decryption
+        //decryption (if necessary)
         /*
         hdr.ciphertext_1.value = hdr.ciphertext_1.value ^ hdr.encryption_key.k;
         hdr.ciphertext_2.value = hdr.ciphertext_2.value ^ hdr.encryption_key.k;
@@ -2048,8 +2048,8 @@ control process_encrypt(
         hdr.plaintext_1.value = hdr.ciphertext_1.value;
         hdr.plaintext_2.value = hdr.ciphertext_2.value;
         hdr.plaintext_3.value = hdr.ciphertext_3.value;
-        */
 
+        */
 
 
 

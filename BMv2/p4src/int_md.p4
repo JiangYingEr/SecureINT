@@ -29,15 +29,23 @@ control MyIngress(inout headers hdr,
 
             if(hdr.udp.isValid() || hdr.tcp.isValid()) {
                 process_int_source_sink.apply(hdr, local_metadata, standard_metadata);
-                //process_check_mtu.apply(hdr, local_metadata, standard_metadata);
+                // set INT source and int_sink
+
+                process_check_mtu.apply(hdr, local_metadata, standard_metadata);
+                // check whether the packet length will exceed MTU after inserting INT metadata (and header)
 
             }
 
             if (local_metadata.int_meta.source == true && local_metadata.int_meta.exceed_mtu != true) {
+                // the current switch is INT source and the packet length is not long
+
                 process_int_source.apply(hdr, local_metadata);
+                // initialize INT packet
             }
 
             if ((local_metadata.int_meta.exceed_mtu == true || local_metadata.int_meta.sink == true) && hdr.int_header.isValid()) {
+                // exceed MTU or the current switch is INT sink
+
                 // clone packet for Telemetry Report
                 // clone3(CloneType.I2E, REPORT_MIRROR_SESSION_ID,standard_metadata);
                 // clone(CloneType.I2E, REPORT_MIRROR_SESSION_ID);
@@ -61,7 +69,7 @@ control MyEgress(inout headers hdr,
                  inout standard_metadata_t standard_metadata) {
 
     apply {
-        if(hdr.int_header.isValid()) {
+        if (hdr.int_header.isValid()) {
             if(standard_metadata.instance_type == PKT_INSTANCE_TYPE_INGRESS_CLONE) {
                 standard_metadata.ingress_port = local_metadata.perserv_meta.ingress_port;
                 standard_metadata.egress_port = local_metadata.perserv_meta.egress_port;
@@ -71,20 +79,30 @@ control MyEgress(inout headers hdr,
                 process_check_mtu_egress.apply(hdr, local_metadata, standard_metadata);
             }
             if (local_metadata.int_meta.exceed_mtu == true && standard_metadata.instance_type != PKT_INSTANCE_TYPE_INGRESS_CLONE) {
+                // the current packet is a normal INT packet whose length is long
+
                 process_clean_int_metadata.apply(hdr, local_metadata, standard_metadata);
+                // clean existing INT metadata
             }
             if (local_metadata.int_meta.exceed_mtu != true || standard_metadata.instance_type != PKT_INSTANCE_TYPE_INGRESS_CLONE) {
+                // the current packet is a normal INT packet whose length is NOT long
+
                 process_int_transit.apply(hdr, local_metadata, standard_metadata);
+                // insert INT metadata
+
                 process_encrypt.apply(hdr, local_metadata, standard_metadata);
-                //process_SipHash_1_3.apply(hdr, local_metadata, standard_metadata);
+                // encrypt (or decrypt, which is disabled by default)
 
-
+                process_SipHash_1_3.apply(hdr, local_metadata, standard_metadata);
+                // generate hash
             }
             if (standard_metadata.instance_type == PKT_INSTANCE_TYPE_INGRESS_CLONE) {
                 process_int_report.apply(hdr, local_metadata, standard_metadata);
+                // generate INT report
             }
             if (local_metadata.int_meta.sink == true && standard_metadata.instance_type != PKT_INSTANCE_TYPE_INGRESS_CLONE) {
                 process_int_sink.apply(hdr, local_metadata, standard_metadata);
+                // remove INT header and metadata
             }
         }
     }
