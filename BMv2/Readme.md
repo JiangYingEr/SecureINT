@@ -33,17 +33,18 @@ In the terminal of the controller, we can see the encrypted INT reports.
 
 # Change/disable SecureINT
 
-If disable encryption, disable the following line in p4src/int_md.p4
+If disable encryption, comment out the following line in p4src/int_md.p4
 
     // process_encrypt.apply(hdr, local_metadata, standard_metadata);
 
-If disable SipHash, disable the following line in p4src/int_md.p4
+If disable SipHash, comment out the following line in p4src/int_md.p4
 
-    process_SipHash_1_3.apply(hdr, local_metadata, standard_metadata);
+    // process_SipHash_1_3.apply(hdr, local_metadata, standard_metadata);
 
 If these two lines are both commented out, SecureINT becomes the ordinary INT, whose INT metadata is plaintext.
 
 The P4 codes of SecureINT contain the decryption function, which is in p4src/include/encrypt.p4
+
 If want to decrypt, uncomment the lines below:
 
     //decryption (if necessary)
