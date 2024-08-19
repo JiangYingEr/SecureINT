@@ -11,5 +11,5 @@ If you find SecureINT or our paper useful, please consider citing:
         booktitle={2023 IEEE/ACM 31st International Symposium on Quality of Service (IWQoS)}, 
         title={In-band Network Telemetry Manipulation Attacks and Countermeasures in Programmable Networks}, 
         year={2023},
-        pages={1-10},
+        pages={1-10}
     }
