@@ -3,7 +3,7 @@
 SecureINT is a security-enhanced INT (In-band Network Telemetry) prototype that provides ***encryption*** and ***integrity verification*** for INT metadata. Programmable switches use Even-Mansour to encrypt INT metadata and SipHash to generate hash values. SecureINT is proposed to defend against In-band Network Telemetry Manipulation Attacks. For more details, please refer to our paper: [In-band Network Telemetry Manipulation Attacks and Countermeasures in Programmable Networks](https://ieeexplore.ieee.org/document/10188809) (published in IWQoS 2023). 
 
 # Citing
-If you find ***SecureINT*** or our ***novel attacks against INT*** useful, please consider citing:
+If you find ***SecureINT*** or our ***attacks against INT*** helpful, please consider citing:
 
 
     @INPROCEEDINGS{2023secureint,
