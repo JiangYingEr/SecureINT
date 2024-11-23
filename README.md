@@ -14,7 +14,8 @@ If you find ***SecureINT*** or our ***attacks against INT*** helpful, please con
         pages={1-10}
     }
 
-  and citing the following:
+and citing the following:
+    
     @ARTICLE{kong2024towards,
         author={Kong, Dezhang and Chen, Xiang and Lin, Hang and Zhou, Zhengyan and Shen, Yi and Liu, Hongyan and Cheng, Qiumei and Liu, Xuan and Zhang, Dong and Wu, Chunming and Khan, Muhammad Khurram},
         journal={IEEE Transactions on Network and Service Management}, 
