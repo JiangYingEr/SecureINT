@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
 # coding=utf-8
 
-# Author: $￥
-# @Time: 2021/10/09 13:29
-
 import threading
 import os
 import sys
